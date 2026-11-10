@@ -1,0 +1,98 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plurivox Plus · Demo</title>
+<style>
+:root{--bg:#f2f5f8;--card:#fff;--ink:#17212b;--mute:#5b6875;--line:#d5dce4;--acc:#1d5c8a;--accd:#154668;--warn:#fff4e0;--warnl:#e3b25b;--c1:#1d5c8a;--c2:#2c7a57;--c3:#a0521d;--code:#eef2f6}
+@media(prefers-color-scheme:dark){:root{--bg:#10171e;--card:#18222c;--ink:#e8eef4;--mute:#9aa8b5;--line:#2c3a47;--acc:#5aa6d8;--accd:#82bde6;--warn:#2b2414;--warnl:#7a5c1d;--c1:#5aa6d8;--c2:#5fc596;--c3:#e3955c;--code:#1d2a36}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Segoe UI",system-ui,sans-serif}
+main{max-width:820px;margin:0 auto;padding:20px 16px 60px;display:grid;gap:14px}
+.sw{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line)}
+button{font:inherit;cursor:pointer}.sw button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 14px;font-size:14px;font-weight:600}
+.sw button[aria-pressed=true]{background:var(--acc);color:#fff;border-color:var(--acc)}
+h1{font:600 30px/1.2 Georgia,serif;margin:6px 0 0}.sub{color:var(--mute);margin:0}h2{font-size:17px;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.banner{background:var(--warn);border:1px solid var(--warnl);border-radius:10px;padding:12px 16px;font-size:15px}
+.q{font-size:17px}.row{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:14px}
+.dot{width:10px;height:10px;border-radius:50%}.mute{color:var(--mute);font-size:14px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:11px 22px;font-weight:600}.btn:hover{background:var(--accd)}.btn:disabled{opacity:.5;cursor:default}
+.btn2{background:none;color:var(--acc);border:1px solid var(--acc);border-radius:8px;padding:9px 16px;font-size:15px}
+#chat{display:grid;gap:10px}.turnh{font-weight:700;color:var(--mute);font-size:14px;text-transform:uppercase;letter-spacing:.05em;margin-top:6px}
+.msg{border-left:4px solid var(--line);background:var(--card);border-radius:0 10px 10px 0;padding:10px 14px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);animation:in .35s ease both}
+.msg b{display:block;font-size:14px}.typing{color:var(--mute);font-style:italic}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.msg{animation:none}}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0}th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{background:var(--code)}
+pre{white-space:pre-wrap;background:var(--code);border-radius:8px;padding:12px 14px;margin:8px 0;font:14px/1.55 Consolas,monospace}
+.guide{display:flex;align-items:center;gap:14px;background:var(--acc);color:#fff;text-decoration:none;border-radius:12px;padding:16px 20px;box-shadow:0 2px 8px rgba(0,0,0,.18)}.guide:hover{background:var(--accd)}.guide .ic{font-size:30px;line-height:1}.guide b{display:block;font-size:19px}.guide span.d{font-size:14px;opacity:.92}.guide .ar{margin-left:auto;font-size:26px}
+.foot{color:var(--mute);font-size:14px;text-align:center}:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style></head><body><main>
+<div class="sw" role="group" aria-label="Language" id="sw"></div>
+<a class="guide" id="gd" href="guida/index.html"><span class="ic" aria-hidden="true">📖</span><span><b id="gt"></b><span class="d" id="gs"></span></span><span class="ar" aria-hidden="true">→</span></a>
+<div><h1 id="t"></h1><p class="sub" id="s"></p></div>
+<div class="banner" id="banner"></div>
+<div class="card"><h2 id="hq"></h2><p class="q" id="q" style="margin:0"></p></div>
+<div class="card"><div class="row"><div><b id="hw"></b><div id="chips" class="row" style="margin-top:6px"></div></div>
+<div><b id="hm"></b><div class="mute" id="mod" style="margin-top:6px"></div></div><div><b id="ht"></b><div class="mute" style="margin-top:6px">2</div></div>
+<div><b id="hf"></b><div class="mute" id="nf" style="margin-top:6px"></div></div></div></div>
+<div class="card" id="mdl"></div>
+<div class="row"><button class="btn" id="go"></button><button class="btn2" id="all"></button><button class="btn2" id="rs" hidden></button></div>
+<div id="chat" aria-live="polite"></div>
+<div class="card" id="rep" hidden></div>
+<div class="card" id="jd" hidden></div>
+<div class="card" id="pr" hidden></div>
+<div class="banner" id="warn"></div>
+<p class="foot" id="foot"></p>
+</main><script>
+const D = {
+it: {
+ name: "Italiano",
+ ui: {title:"Plurivox Plus · Demo", sub:"Guarda come funziona un dibattito tra IA, con un esempio già pronto.", banner:"<b>Demo dimostrativa.</b> I testi qui sotto sono esempi scritti a mano per mostrare come si presenta un dibattito: nessuna IA è stata interrogata e non sono risposte reali di Claude, ChatGPT o Gemini. Nel programma vero le risposte vengono dalle IA che scegli con le tue chiavi.", ex:"Esempio", q:"Il quesito", who:"Chi partecipa", added:"IA aggiunta", mod:"Moderatore", turns:"Turni di dibattito", files:"File di riferimento", nofiles:"Nessun file in questo esempio", start:"Avvia il dibattito", replay:"Rivedi dall'inizio", all:"Mostra tutto subito", turn:"Turno", thinking:"sta scrivendo…", rep:"Relazione finale", repby:"scritta dal moderatore", prompt:"Prompt pronto per un compito specifico", promptn:"Si può incollare in «Compito singolo» insieme alla relazione.", warn:"Prima di usare dati reali: non caricare dati personali o sensibili, verifica sempre il risultato e rispetta le regole del tuo Paese e della tua organizzazione. Il programma mostra le avvertenze del Paese in cui lo apri.", foot:"Demo di Plurivox Plus · esempi simulati, non consulenza"},
+ q: "Siamo un piccolo negozio online di articoli per la casa. Possiamo usare l'IA per scrivere le prime bozze delle risposte alle email dei clienti? Abbiamo dubbi su qualità, tempi e dati dei clienti.",
+ turns: [[
+  {ai:"Claude", t:"Sì, ma solo come bozza: una persona la legge e la invia. Le email di assistenza sono ripetitive (spedizioni, resi, garanzia) e qui l'IA fa risparmiare tempo. Il rischio principale è promettere cose sbagliate, per esempio rimborsi o tempi di consegna. Proporrei modelli di risposta approvati e l'IA che li adatta al caso."},
+  {ai:"ChatGPT", t:"Concordo sul controllo umano. Aggiungo il tema dati: nome, indirizzo e numero d'ordine sono dati personali. Prima di inviarli a un servizio esterno conviene toglierli o sostituirli con segnaposto e controllare le condizioni del fornitore. Partirei dalle email che non contengono dati personali, per esempio le domande sui prodotti."},
+  {ai:"Gemini", t:"Misurerei il vantaggio prima di decidere. Per due settimane contate quante email arrivano, di che tipo e quanto tempo richiede ciascuna. Se le richieste ripetitive sono poche, il beneficio è piccolo e non vale la complessità. Serve anche un criterio di qualità: quante bozze si inviano senza modifiche."}],[
+  {ai:"Claude", t:"Il punto di ChatGPT sui dati cambia il mio piano: partiamo solo dalle domande sui prodotti, senza dati dei clienti. Sul punto di Gemini mi correggo: prima si misura. Aggiungo una regola: l'IA non scrive mai su rimborsi, reclami o questioni legali, che restano a una persona."},
+  {ai:"ChatGPT", t:"Sono d'accordo con le due regole. Propongo un test di tre settimane: una persona usa le bozze e annota il tempo risparmiato e le correzioni necessarie. Alla fine decidete con i numeri. Va anche valutato se informare i clienti dell'uso dell'IA nell'assistenza, dove richiesto."},
+  {ai:"Gemini", t:"Sì al test, ma fissiamo le soglie prima di iniziare: per esempio almeno il 60% di bozze usabili con poche modifiche e nessun errore su prezzi o tempi. Se non le raggiungete, si sospende. Va deciso anche chi controlla e chi risponde se parte una risposta sbagliata."}]],
+ rep: {title:"Relazione finale: IA per le email dei clienti", sum:"Conviene provarla come supporto, non come sostituto: l'IA prepara la bozza, una persona la controlla e la invia. Si parte con un test di tre settimane e si decide sui numeri.", head:["Aspetto","Posizione condivisa"], rows:[["Controllo umano","Ogni risposta è letta e inviata da una persona"],["Dati dei clienti","Nessun dato personale nel test; solo domande sui prodotti"],["Limiti","L'IA non tratta rimborsi, reclami o questioni legali"],["Misura","Tempo risparmiato e percentuale di bozze usabili (soglia da fissare, per esempio 60%)"]], dis:"<b>Punti aperti.</b> ChatGPT chiede di valutare l'informativa ai clienti; Gemini di fissare le soglie prima dell'avvio. Responsabile del controllo: [DA VERIFICARE: chi nel negozio]."},
+ prompt: "Sei un assistente per un negozio online di articoli per la casa. Scrivi una bozza di risposta cortese e chiara all'email del cliente che trovi sotto, usando solo le informazioni nel documento allegato. Non promettere rimborsi o tempi di consegna che non sono indicati. Se manca un'informazione scrivi [DA VERIFICARE]. Restituisci solo il testo della bozza, in non più di 120 parole."
+}
+};
+
+const L=["it"],$=id=>document.getElementById(id),COL=["var(--c1)","var(--c2)","var(--c3)"];
+let cur="en",tm=[],run=0;
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const GL={"it": ["Vai alla guida", "Come si installa e si usa Plurivox Plus, passo per passo"]};
+const AIS=["Claude", "ChatGPT", "Gemini"];const ROWS=[["Claude", "top", "Fable \u00b7 claude-fable-5-1", "10 / 50"], ["ChatGPT", "std", "gpt-6.1-sol", "2 / 10"], ["Gemini", "std", "gemini-3.5-flash", "1.5 / 9"]];const P={"it": {"mh": "Modello di ciascuna IA", "lv": ["Top", "Standard"], "pr": "dollari per milione di token (ingresso / uscita), prezzi indicativi", "mn": "Per ogni IA si sceglie Standard o Top. Se il modello scelto non risponde, il programma passa da solo al modello di ripiego e lo scrive nell'avanzamento.", "jh": "Giudizio indipendente", "jby": "Giudice Grok · modello Top (grok-4.7)", "jv": "Esito: AFFIDABILE CON RISERVE", "jp": ["Le soglie numeriche proposte sono esempi, non derivano da dati: vanno confermate dopo il test.", "Il responsabile del controllo non è ancora indicato.", "Le regole del Paese sull'uso dell'IA non sono verificabili da qui."], "jn": "Un giudice rilegge il risultato e scrive un giudizio a parte, in un file Word: non modifica nulla. Esempio scritto a mano.", "std": "Standard", "top": "Top", "adm": "IA aggiunta", "th": ["IA", "Livello", "Modello", "$ / M token"]}};const ADDED=false;
+function clear(){tm.forEach(clearTimeout);tm=[];run++;$("chat").innerHTML="";$("rep").hidden=true;$("jd").hidden=true;$("pr").hidden=true;$("go").disabled=false;$("rs").hidden=true}
+function setLang(l){cur=l;clear();const d=D[l],u=d.ui;document.documentElement.lang=l;document.title=u.title;
+try{localStorage.setItem("pvdemo",l)}catch(e){}
+$("sw").hidden=L.length<2;$("sw").innerHTML=L.map(k=>`<button type="button" data-l="${k}" aria-pressed="${k===l}">${D[k].name}</button>`).join("");
+$("sw").querySelectorAll("button").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+$("gt").textContent=GL[l][0];$("gs").textContent=GL[l][1];$("t").textContent=u.title;$("s").textContent=u.sub;$("banner").innerHTML=u.banner;$("hq").textContent=u.ex+" · "+u.q;$("q").textContent=d.q;
+$("hw").textContent=u.who;$("hm").textContent=u.mod;$("mod").textContent="Claude";$("ht").textContent=u.turns;$("hf").textContent=u.files;$("nf").textContent=u.nofiles;
+$("chips").innerHTML=AIS.map((a,i)=>`<span class="chip"><span class="dot" style="background:${COL[i]}"></span>${a}${ADDED&&i===2?` <span class="mute">(${u.added})</span>`:""}</span>`).join("");
+models();$("go").textContent=u.start;$("all").textContent=u.all;$("rs").textContent=u.replay;$("warn").textContent=u.warn;$("foot").textContent=u.foot}
+function models(){const p=P[cur];
+$("mdl").innerHTML=`<h2>${p.mh}</h2><table><tr>${p.th.map(h=>`<th>${h}</th>`).join("")}</tr>${ROWS.map(r=>`<tr><td>${esc(r[0])}</td><td>${r[1]==="top"?p.top:r[1]==="std"?p.std:p.adm}</td><td>${esc(r[2])}</td><td>${r[3]||"—"}</td></tr>`).join("")}</table><p class="mute" style="margin:0">${esc(p.mn)} (${p.pr})</p>`}
+function judge(){const p=P[cur];
+$("jd").innerHTML=`<h2>${p.jh} <span class="mute" style="font-weight:400">· ${esc(p.jby)}</span></h2><p><b>${esc(p.jv)}</b></p><ol style="margin:6px 0 8px 20px;padding:0">${p.jp.map(x=>`<li>${esc(x)}</li>`).join("")}</ol><p class="mute" style="margin:0">${esc(p.jn)}</p>`;$("jd").hidden=false}
+function msg(ai,i,t){const e=document.createElement("div");e.className="msg";e.style.borderLeftColor=COL[i];e.innerHTML=`<b style="color:${COL[i]}">${esc(ai)}</b>${esc(t)}`;$("chat").appendChild(e);return e}
+function report(){const d=D[cur],u=d.ui,r=d.rep;
+$("rep").innerHTML=`<h2>${u.rep} <span class="mute" style="font-weight:400">· ${u.repby}</span></h2><h3 style="margin:6px 0">${esc(r.title)}</h3><p>${esc(r.sum)}</p><table><tr>${r.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr>${r.rows.map(x=>`<tr>${x.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table><p style="margin:0">${r.dis}</p>`;
+$("pr").innerHTML=`<h2>${u.prompt}</h2><p class="mute" style="margin:0">${u.promptn}</p><pre>${esc(d.prompt)}</pre>`;
+$("rep").hidden=false;judge();$("pr").hidden=false}
+function play(fast){clear();const d=D[cur],u=d.ui;$("go").disabled=true;$("rs").hidden=false;const me=run;
+const steps=[];d.turns.forEach((turn,ti)=>{steps.push({h:`${u.turn} ${ti+1} / 2`});turn.forEach(m=>steps.push(m))});steps.push({rep:1});
+if(fast||matchMedia("(prefers-reduced-motion:reduce)").matches){steps.forEach(s=>{if(s.h){const h=document.createElement("div");h.className="turnh";h.textContent=s.h;$("chat").appendChild(h)}else if(s.rep)report();else msg(s.ai,AIS.indexOf(s.ai),s.t)});return}
+let at=0;steps.forEach(s=>{
+if(s.h){tm.push(setTimeout(()=>{if(me!==run)return;const h=document.createElement("div");h.className="turnh";h.textContent=s.h;$("chat").appendChild(h)},at));at+=250}
+else if(s.rep){tm.push(setTimeout(()=>{if(me!==run)return;report();$("rep").scrollIntoView({behavior:"smooth",block:"start"})},at))}
+else{const i=AIS.indexOf(s.ai);let box;
+tm.push(setTimeout(()=>{if(me!==run)return;box=document.createElement("div");box.className="msg typing";box.style.borderLeftColor=COL[i];box.innerHTML=`<b style="color:${COL[i]}">${s.ai}</b>${u.thinking}`;$("chat").appendChild(box);box.scrollIntoView({block:"nearest"})},at));at+=1300;
+tm.push(setTimeout(()=>{if(me!==run)return;box.className="msg";box.innerHTML=`<b style="color:${COL[i]}">${esc(s.ai)}</b>${esc(s.t)}`},at));at+=900}})}
+$("go").onclick=()=>play(false);$("all").onclick=()=>play(true);$("rs").onclick=()=>{clear();play(false)};
+let s=null;try{s=localStorage.getItem("pvdemo")}catch(e){}
+const nav=(navigator.languages||[navigator.language||"en"]).map(x=>x.slice(0,2).toLowerCase()).find(x=>L.includes(x));
+setLang(L.includes(s)?s:nav||"en");
+</script></body></html>
