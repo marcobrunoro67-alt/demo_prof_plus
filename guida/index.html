@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guida all'avvio di Plurivox Plus</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f6f8; --panel:#ffffff; --fg:#14232e; --muted:#5a6b78; --line:#d6dee4;
+  --accent:#0b6e7f; --accent-fg:#ffffff; --code-bg:#e9eff3; --warn-bg:#fff4d6; --warn-fg:#5b4300; --warn-line:#e8c766;
+  --f-d:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif; --f-b:"IBM Plex Sans","Segoe UI",system-ui,sans-serif; --f-m:"IBM Plex Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1a22; --panel:#15262f; --fg:#e6eef3; --muted:#93a6b3; --line:#27404e;
+  --accent:#4fc3d6; --accent-fg:#06222a; --code-bg:#1d3340; --warn-bg:#3a2f0e; --warn-fg:#f3dc9a; --warn-line:#7a6320; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a22; --panel:#15262f; --fg:#e6eef3; --muted:#93a6b3; --line:#27404e;
+  --accent:#4fc3d6; --accent-fg:#06222a; --code-bg:#1d3340; --warn-bg:#3a2f0e; --warn-fg:#f3dc9a; --warn-line:#7a6320; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:17px/1.6 var(--f-b);margin:0;
+  padding-block:24px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto;display:grid;gap:18px;min-width:0}
+h1{font:700 clamp(28px,5vw,40px)/1.1 var(--f-d);margin:0;text-wrap:balance}
+h2{font:700 24px/1.2 var(--f-d);margin:0;text-wrap:balance;scroll-margin-top:16px}
+p{margin:0}
+.sub{color:var(--muted);max-width:62ch}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{border:1px solid var(--line);background:var(--panel);color:var(--fg);text-decoration:none;border-radius:999px;padding:6px 14px;font-size:15px}
+nav.toc a:hover{border-color:var(--accent);color:var(--accent)}
+section{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;display:grid;gap:14px;min-width:0}
+ol,ul{margin:0;padding-left:22px;display:grid;gap:10px}
+li{min-width:0}
+code{font:500 .9em var(--f-m);background:var(--code-bg);border-radius:4px;padding:1px 6px;overflow-wrap:anywhere}
+pre{margin:0;background:var(--code-bg);border-radius:6px;padding:14px;overflow-x:auto;font:400 14px/1.6 var(--f-m)}
+pre code{background:none;padding:0}
+kbd{font:500 .85em var(--f-m);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 6px;background:var(--bg)}
+.note{background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);border-radius:6px;padding:10px 14px;font-size:15px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:10px 12px}
+th{font:600 13px var(--f-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.foot{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <h1>Guida all'avvio di Plurivox Plus</h1>
+    <p class="sub">Come installare e avviare il programma su Windows, macOS e Linux, e come preparare il file <code>.env</code> con le tue chiavi.</p>
+  </header>
+
+  <nav class="toc" aria-label="Indice">
+    <a href="#prima">Prima di cominciare</a>
+    <a href="#env">Il file .env</a>
+    <a href="#claude">Modelli: Standard, Top, ripiego e Giudici</a>
+    <a href="#altre-ia">Aggiungere altre IA</a>
+    <a href="#windows">Windows</a>
+    <a href="#macos">macOS</a>
+    <a href="#linux">Linux</a>
+    <a href="#problemi">Problemi frequenti</a>
+  </nav>
+
+  <section id="prima">
+    <h2>Prima di cominciare</h2>
+    <p>Plurivox Plus gira sul tuo computer: si avvia con un doppio clic o da riga di comando, apre una pagina nel browser e usa le tue chiavi API per interrogare le intelligenze artificiali. Servono tre cose.</p>
+    <ol>
+      <li>La cartella del programma, estratta dallo zip (Windows e macOS) o dal file tar.gz (Linux).</li>
+      <li>Almeno una chiave API, per esempio quella di Claude o di Grok. Le chiavi API si creano nelle console dei fornitori e si pagano a consumo; l'abbonamento alle app di chat non le include.</li>
+      <li>Un file chiamato <code>.env</code>, nella stessa cartella del programma, con le chiavi.</li>
+    </ol>
+    <p>La pagina del programma si apre all'indirizzo <code>http://127.0.0.1:8765</code>, raggiungibile solo dal tuo computer. Lascia aperta la finestra del programma finché lavori: chiuderla ferma il programma.</p>
+  </section>
+
+  <section id="env">
+    <h2>Il file .env</h2>
+    <p>Il file <code>.env</code> è un normale file di testo con una chiave per riga. Il nome inizia con un punto e non ha estensione: non <code>.env.txt</code>, non <code>env</code>. Nella cartella trovi <code>.env.example</code>, un modello già pronto: va copiato con il nome <code>.env</code> e poi compilato.</p>
+    <pre><code>ANTHROPIC_API_KEY=incolla-qui-la-chiave
+XAI_API_KEY=incolla-qui-la-chiave
+OPENAI_API_KEY=
+GOOGLE_API_KEY=</code></pre>
+    <p>Regole di scrittura:</p>
+    <ul>
+      <li>Una chiave per riga, nel formato <code>NOME=valore</code>, senza spazi attorno al segno <code>=</code> e senza virgolette.</li>
+      <li>Le IA di cui non hai la chiave lasciale vuote o cancella la riga. Il programma usa solo quelle presenti.</li>
+      <li>Se scegli come moderatore una IA senza chiave, il moderatore diventa la prima presente nel file.</li>
+      <li>Dopo ogni modifica chiudi il programma e riavvialo.</li>
+    </ul>
+    <div class="note"><strong>Sicurezza.</strong> La chiave equivale a una carta di pagamento. Non inviare il file <code>.env</code>, non caricarlo su GitHub e non copiarlo in cartelle condivise. Se pensi che una chiave sia stata vista da altri, revocala dalla console del fornitore e creane una nuova. In ogni console conviene impostare un limite di spesa.</div>
+  </section>
+
+  <section id="claude">
+    <h2>Modelli: Standard, Top, ripiego e Giudici</h2>
+    <p>Nella sezione dei costi la pagina mostra «Modello di ciascuna IA»: per ogni IA di cui hai la chiave nel <code>.env</code> scegli <b>Standard</b> (uso quotidiano) oppure <b>Top</b> (il modello più potente e più caro). La scelta vale per tutto il lavoro di quell'IA e il programma la ricorda per la volta successiva.</p>
+    <div class="tw">
+    <table>
+      <thead><tr><th>IA</th><th>Standard</th><th>Top</th><th>Ripiego</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Claude</strong></td><td>Sonnet 5.5<br><small>claude-sonnet-5-5</small><br>2 / 10</td><td>Fable 5.1<br><small>claude-fable-5-1</small><br>10 / 50</td><td>Opus 5.5<br><small>claude-opus-5-5</small><br>4 / 20</td></tr>
+        <tr><td><strong>Grok</strong></td><td>grok-4.3<br>1.25 / 2.5</td><td>grok-4.7<br>2 / 6</td><td>grok-4.3</td></tr>
+        <tr><td><strong>ChatGPT</strong></td><td>gpt-6.1-sol<br>2 / 10</td><td>gpt-6-astra<br>10 / 50</td><td>gpt-6.1-sol</td></tr>
+        <tr><td><strong>Gemini</strong></td><td>gemini-3.5-flash<br>1.5 / 9</td><td>gemini-4-argon*<br>4 / 20</td><td>gemini-3.5-flash</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note">* Gemini 4 Argon costa 2 / 10 dollari fino al 30 novembre 2026 e poi 4 / 20: il programma usa già 4 / 20.<br><b>Prezzi.</b> Sono dollari per milione di token (ingresso / uscita), valori indicativi: i listini e i nomi dei modelli cambiano. Controllali sui siti dei fornitori e correggili nel <code>.env</code>.</div>
+    <p><strong>Ripiego automatico.</strong></p>
+    <ul>
+      <li>Se il modello scelto non esiste, non è abilitato per la tua chiave, il servizio è sovraccarico o hai superato il limite di richieste, il programma riprova da solo con il modello di ripiego della stessa IA e lo scrive nell'avanzamento («Riprovo con…»). Il costo cambia: a fine lavoro vedi il consumo reale.</li>
+      <li>Non c'è ripiego se la chiave è sbagliata o il credito è finito (il ripiego non servirebbe), né quando il modello rifiuta la richiesta per ragioni di sicurezza.</li>
+      <li>Una riga <code>..._FALLBACK_MODEL=</code> vuota spegne il ripiego di quella IA. Un modello risultato non disponibile non viene più riprovato nello stesso lavoro.</li>
+    </ul>
+    <p>Nel <code>.env</code> (tutte righe facoltative; quelle mostrate sono i valori predefiniti):</p>
+    <pre><code>CLAUDE_MODEL=claude-sonnet-5-5
+CLAUDE_TOP_MODEL=claude-fable-5-1
+CLAUDE_FALLBACK_MODEL=claude-opus-5-5
+GROK_MODEL=grok-4.3
+GROK_TOP_MODEL=grok-4.7
+OPENAI_MODEL=gpt-6.1-sol
+OPENAI_TOP_MODEL=gpt-6-astra
+GEMINI_MODEL=gemini-3.5-flash
+GEMINI_TOP_MODEL=gemini-4-argon</code></pre>
+    <p>La scelta iniziale della pagina si cambia con <code>CLAUDE_DEFAULT_TIER</code>, <code>GROK_DEFAULT_TIER</code>, <code>CHATGPT_DEFAULT_TIER</code>, <code>GEMINI_DEFAULT_TIER</code> (<code>std</code> o <code>top</code>). I prezzi: <code>PRICE_CLAUDE_IN</code> / <code>PRICE_CLAUDE_OUT</code> (Standard), <code>PRICE_CLAUDE_TOP_IN</code> / <code>PRICE_CLAUDE_TOP_OUT</code>, <code>PRICE_CLAUDE_FALLBACK_IN</code> / <code>PRICE_CLAUDE_FALLBACK_OUT</code>; lo stesso per <code>GROK</code>, <code>CHATGPT</code> e <code>GEMINI</code>.</p>
+    <p><strong>Giudici.</strong> Nella sezione «Giudici (facoltativo)» puoi spuntare una o più IA. Dopo il lavoro ogni giudice rilegge il risultato con il <b>proprio modello Top</b> e scrive un <b>giudizio indipendente</b> in un file Word a parte (<code>giudizio_NomeIA.docx</code>): esito (affidabile, con riserve, da rivedere), errori, contraddizioni con i documenti, punti mancanti, punti «da verificare» ancora aperti, correzioni consigliate.</p>
+    <ul>
+      <li>Non modifica nulla: il tuo risultato resta com'è.</li>
+      <li>Legge il quesito, i documenti e il risultato (nel dibattito, la relazione finale; nel compito singolo, il Word, la macro e l'elenco delle modifiche all'Excel), non l'intero dibattito.</li>
+      <li>Usa sempre il modello Top, anche se per il lavoro hai scelto Standard, e costa in più: compare come riga a parte nella stima. Con più giudici il costo si somma.</li>
+      <li>Conviene scegliere un'IA diversa da quelle che hanno lavorato, per avere un secondo parere davvero indipendente.</li>
+      <li>Non ha accesso a Internet: ciò che non può controllare lo scrive «non verificabile da qui». È un controllo in più e non sostituisce quello di un professionista.</li>
+    </ul>
+    <p><strong>Quanto costa davvero.</strong> «Stima il costo» mostra la stima con le tue scelte e due confronti: tutte le IA in Standard e tutte in Top. I modelli Top possono costare molte volte di più. I modelli che ragionano usano token in più, non prevedibili: la stima è una guida. A fine lavoro l'avanzamento riporta il <b>consumo reale</b> (token e dollari per ogni IA e modello usato, ripiego compreso). Il pulsante «Verifica di nuovo le chiavi» prova separatamente il modello Standard e il modello Top di ogni chiave e ti dice se il Top è disponibile.</p>
+  </section>
+
+  <section id="altre-ia">
+    <h2>Aggiungere altre IA</h2>
+    <p>Oltre a Claude, Grok, ChatGPT e Gemini puoi aggiungere altre IA dalla pagina del programma. Apri «Gestisci le IA (aggiungi altri servizi)», sopra il modulo. Scegli un modello di partenza (Mistral, DeepSeek, Perplexity, Groq, OpenRouter, Qwen, Together, Ollama, LM Studio) oppure compila a mano: nome, tipo di interfaccia (compatibile OpenAI o Anthropic), indirizzo del servizio, nome del modello, chiave API. Per un modello locale la chiave resta vuota.</p>
+    <ul>
+      <li>L'IA compare subito tra i partecipanti, i moderatori e le IA di revisione; la sua chiave viene verificata come le altre.</li>
+      <li>Spunta «Il modello sa leggere le immagini» solo se è vero: altrimenti le immagini non le vengono inviate.</li>
+      <li>I prezzi sono facoltativi: senza prezzi il costo di quella IA non entra nella stima.</li>
+      <li>Le impostazioni sono in <code>providers.json</code> (accanto al programma), la chiave nel <code>.env</code>. I nomi dei modelli cambiano spesso: controllali nella documentazione del fornitore. Per rimuovere una IA usa «Rimuovi».</li>
+      <li>Le IA aggiunte usano un solo modello: non hanno la scelta Standard/Top né il ripiego automatico, e non possono fare da giudice.</li>
+    </ul>
+  </section>
+
+  <section id="windows">
+    <h2>Windows</h2>
+    <ol>
+      <li>Scarica lo zip. Prima di estrarlo, clic destro sul file, <strong>Proprietà</strong>, spunta <strong>Annulla blocco</strong> in fondo alla scheda Generale e premi OK. Così Windows non marca come sospetti tutti i file estratti.</li>
+      <li>Clic destro sullo zip, <strong>Estrai tutto</strong>, e scegli una cartella tua, per esempio <code>Documenti\DibattitoIA</code>. Evita le cartelle di sistema e le cartelle sincronizzate con OneDrive, se possibile.</li>
+      <li>In Esplora file apri la scheda <strong>Visualizza</strong> e attiva <strong>Estensioni nomi file</strong>. Serve per non creare per errore <code>.env.txt</code>.</li>
+      <li>Nella cartella fai clic destro su <code>.env.example</code>, <strong>Copia</strong>, poi incolla nella stessa cartella e rinomina la copia in <code>.env</code>. Windows chiede conferma per il cambio di estensione: rispondi Sì. In alternativa, da Prompt dei comandi nella cartella: <code>copy .env.example .env</code>.</li>
+      <li>Apri <code>.env</code> con il Blocco note (clic destro, <strong>Apri con</strong>, Blocco note), incolla le chiavi dopo il segno <code>=</code>, salva con <kbd>Ctrl</kbd>+<kbd>S</kbd>.</li>
+      <li>Fai doppio clic su <code>plurivox.exe</code>. Si apre una finestra nera e, dopo qualche secondo, il browser con la pagina del programma.</li>
+      <li>Se Windows mostra “PC protetto da Windows”, scegli <strong>Ulteriori informazioni</strong> e poi <strong>Esegui comunque</strong>. Succede perché il programma non è firmato con un certificato a pagamento.</li>
+    </ol>
+    <p>Per chiudere, usa il pulsante di uscita nella pagina oppure chiudi la finestra nera. Se la finestra nera si chiude subito, apri <code>errore.log</code> nella stessa cartella: contiene il motivo.</p>
+  </section>
+
+  <section id="macos">
+    <h2>macOS</h2>
+    <p>La versione per Mac è compilata per i Mac con chip Apple (M1 e successivi). Sui Mac Intel più vecchi non parte.</p>
+    <ol>
+      <li>Scarica lo zip ed estrailo con doppio clic. Sposta la cartella ottenuta in una posizione tua, per esempio <code>Documenti/DibattitoIA</code>.</li>
+      <li>Apri <strong>Terminale</strong> (Spotlight, poi scrivi “Terminale”) e entra nella cartella. Il modo più semplice: scrivi <code>cd </code> (con lo spazio), trascina la cartella nella finestra del Terminale e premi Invio.</li>
+      <li>Crea il file <code>.env</code> copiando il modello: <code>cp .env.example .env</code>. Il Finder nasconde i file che iniziano con il punto; per vederli premi <kbd>Cmd</kbd>+<kbd>Maiusc</kbd>+<kbd>.</kbd> (punto).</li>
+      <li>Apri <code>.env</code> come testo semplice con <code>open -e .env</code>, incolla le chiavi dopo il segno <code>=</code> e salva con <kbd>Cmd</kbd>+<kbd>S</kbd>. Se usi un altro editor, controlla che salvi in testo semplice e non in formato RTF.</li>
+      <li>Togli il blocco di sicurezza ai file scaricati: <code>xattr -dr com.apple.quarantine .</code> (con il punto finale).</li>
+      <li>Rendi il programma eseguibile, se serve: <code>chmod +x plurivox</code>.</li>
+      <li>Avvia con <code>./plurivox</code>. Dopo qualche secondo si apre il browser con la pagina del programma.</li>
+    </ol>
+    <p>Se al primo avvio macOS dice che non può verificare lo sviluppatore, apri <strong>Impostazioni di Sistema</strong>, poi <strong>Privacy e sicurezza</strong>, e premi <strong>Apri comunque</strong> vicino al nome del programma. Il passo 5 di solito evita questo avviso.</p>
+    <p>Per chiudere, usa il pulsante di uscita nella pagina oppure premi <kbd>Ctrl</kbd>+<kbd>C</kbd> nel Terminale.</p>
+  </section>
+
+  <section id="linux">
+    <h2>Linux</h2>
+    <p>La versione per Linux è compilata su Ubuntu e funziona sulle distribuzioni recenti a 64 bit. Serve un ambiente grafico con un browser.</p>
+    <ol>
+      <li>Scarica il file <code>.tar.gz</code> ed estrailo: dal gestore file con “Estrai qui”, oppure da terminale con <code>tar -xzf nome-del-file.tar.gz</code>.</li>
+      <li>Apri un terminale nella cartella estratta: <code>cd percorso/della/cartella</code>.</li>
+      <li>Crea il file <code>.env</code> dal modello: <code>cp .env.example .env</code>. I file che iniziano con il punto sono nascosti: per vederli nel gestore file premi <kbd>Ctrl</kbd>+<kbd>H</kbd>, da terminale usa <code>ls -a</code>.</li>
+      <li>Apri il file con un editor di testo, per esempio <code>nano .env</code>. Incolla le chiavi dopo il segno <code>=</code>, salva con <kbd>Ctrl</kbd>+<kbd>O</kbd> e invio, esci con <kbd>Ctrl</kbd>+<kbd>X</kbd>.</li>
+      <li>Se il programma non è eseguibile: <code>chmod +x plurivox</code>.</li>
+      <li>Avvia con <code>./plurivox</code>. Dopo qualche secondo si apre il browser; se non succede, apri a mano <code>http://127.0.0.1:8765</code>.</li>
+    </ol>
+    <p>Per chiudere, usa il pulsante di uscita nella pagina oppure premi <kbd>Ctrl</kbd>+<kbd>C</kbd> nel terminale. Il <code>.env</code> viene letto dalla cartella da cui avvii il programma o dalla cartella del programma stesso: tienilo accanto all'eseguibile.</p>
+  </section>
+
+  <section id="problemi">
+    <h2>Problemi frequenti</h2>
+    <div class="tw">
+    <table>
+      <thead><tr><th>Sintomo</th><th>Causa probabile</th><th>Cosa fare</th></tr></thead>
+      <tbody>
+        <tr><td>“Nessuna chiave API trovata”</td><td>Il file si chiama <code>.env.txt</code> o <code>env</code>, oppure non è accanto al programma</td><td>Rinomina in <code>.env</code> (su Windows attiva la vista delle estensioni) e spostalo nella cartella del programma</td></tr>
+        <tr><td>Una IA non compare tra i partecipanti</td><td>Manca la sua chiave nel <code>.env</code></td><td>Aggiungi la riga della chiave e riavvia</td></tr>
+        <tr><td>La finestra si chiude subito (Windows)</td><td>Errore all'avvio</td><td>Apri <code>errore.log</code> nella cartella del programma</td></tr>
+        <tr><td>«Claude: il modello … non ha risposto. Riprovo con …» (o un'altra IA)</td><td>Il modello scelto (di solito il Top) non è abilitato per la tua chiave, oppure il servizio è sovraccarico</td><td>Il programma è andato avanti con il modello di ripiego. Controlla l'accesso al modello Top nel tuo account, oppure scegli Standard</td></tr>
+        <tr><td>«Top: modello non disponibile con questa chiave»</td><td>Il modello Top non è abilitato per il tuo account o il nome nel <code>.env</code> non è esatto.</td><td>Se c'è un ripiego il programma lo userà; altrimenti scegli Standard o correggi <code>..._TOP_MODEL</code>.</td></tr>
+        <tr><td>«Giudice … non eseguito: manca la chiave di questa IA»</td><td>Il giudice scelto non ha la chiave nel <code>.env</code></td><td>Scrivi la chiave nel <code>.env</code> e riavvia, oppure scegli un altro giudice</td></tr>
+        <tr><td>Il browser non si apre</td><td>Browser predefinito non impostato</td><td>Apri a mano <code>http://127.0.0.1:8765</code></td></tr>
+        <tr><td>L'indirizzo non si apre</td><td>Una copia aperta occupa la porta 8765: il programma ne usa un'altra</td><td>Usa l'indirizzo scritto nella finestra del programma, oppure chiudi l'altra copia</td></tr>
+        <tr><td>Errore di credito o autorizzazione</td><td>Credito esaurito o chiave revocata</td><td>Controlla la console del fornitore e il limite di spesa</td></tr>
+        <tr><td>Il file scaricato non si apre dalla pagina</td><td>Il browser blocca il download</td><td>Conferma “Mantieni” nelle notifiche del browser; i file restano disponibili per circa 15 minuti</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>La versione del programma compare in fondo alla pagina, accanto a “Chiudi il programma”, e nella finestra all'avvio: indicala sempre quando chiedi assistenza.</p>
+  </section>
+
+</div>
+</body>
+</html>
